@@ -1,4 +1,5 @@
 from pyramid.view import view_config
+from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -29,3 +30,28 @@ def blog_list_view(request):
                                'author' : article.author,\
                                'content' : article.content})
     return {'renderDictList' : renderDictList}
+
+def blog_article_view(request):
+    """Display a blog article.
+    """
+    engine = create_engine('sqlite:///:blog:')
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    try:
+        articleId = request.matchdict['articleId']
+    except KeyError:
+        raise HTTPNotFound()
+    article = session.query(Article).filter(Article.id == articleId).all()
+    if len(article) > 1:
+        raise HTTPInternalServerError()
+    if len(article) == 0:
+        raise HTTPNotFound()
+    article = article[0]
+    renderDict = {'title' : article.title,\
+                           'date' : article.date.strftime("%d/%m/%y %H:%M"),\
+                           'author' : article.author,\
+                           'content' : article.content}
+    return {'article' : renderDict}
+
+        
+    
