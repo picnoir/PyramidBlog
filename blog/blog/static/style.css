@@ -1,0 +1,215 @@
+body
+{
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    line-height: 20px;
+    color: rgb(51, 51, 51);
+    background-image: url('Images/dark_wall.png');
+    background-repeat: repeat;
+    background-color: rgb(117,117,117);
+}
+
+.page
+{
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    width: 980px;
+}
+
+.titre
+{
+    color: rgb(100,100,100);
+    text-align: center;
+    font-family: 'Jockey One',Helvetica,serif;
+    font-size: 50px;
+    font-weight: inherit;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.aProposBarre
+{
+    border: 1px solid rgb(0, 0, 0);
+    height: 33px;
+    text-align: center;
+    border-radius: 0px 0px 8px 8px;
+    box-shadow: 0px 0px 5px rgb(0, 0, 0);
+    background-image: url('Images/fondMenu.png');
+    background-repeat: repeat-x;
+}
+
+.blocPrincipal
+{
+    float: right;
+    width: 650px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 0px 0px 0px 0px;
+    background-color: rgb(40,40,40);
+    box-shadow: 0px 0px 10px rgb(0,0,0);
+}
+
+.menu
+{
+    text-shadow: 0px 0px 4px rgb(0,0,0);
+    float: left;
+    margin-top: 150px;
+    width: 300px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 0px 0px 0px 0px;
+    background-color: rgb(30,30,30);
+    box-shadow: 0px 0px 10px rgb(0,0,0);
+}
+
+.article
+{
+    width: 640px;   
+}
+
+.menuPrincipal
+{
+    color: rgb(220,220,220);
+    font-family: 'Text Me One';
+    font-size: 30px;
+    line-height: 35px;
+    margin: 10px 0px 0px;
+    list-style: none outside none;
+}
+
+.menuHr
+{
+    border: 0px dashed black;
+    border-top: 1px solid rgb(35,35,35);
+    width: 100%;
+    height: 3px;
+    background-color: rgb(25,25,25);
+}
+
+.catHr
+{
+    border: 0px dashed black;
+    width: 80%;
+    height: 1px;
+    background-color: rgb(50,50,50);
+}
+
+.titreCat
+{
+    color: rgb(220,220,220);
+    font-family: 'Text Me One';
+    font-size: 30px;
+    padding-left: 40px;
+    margin: 20px 0px 20px 0px;
+}
+
+.categories
+{
+    list-style: none outside none;
+}
+
+.dateNews
+{
+    color: rgb(180,180,180);
+    font-size:10px;
+    margin-bottom: 5px;
+}
+
+.categorie
+{
+    margin-top:0px;
+    color: rgb(210,210,210);
+}
+
+.sectionTitle
+{
+    font-family: 'Text Me One';
+    text-shadow: 0px 0px 9px rgb(0,0,0);
+    padding-left: 30px;
+    font-size: 40px;
+    color: rgb(200,200,200);
+}
+
+.titreHr
+{
+    border: 0px dashed black;
+    border-top: 1px solid rgb(35,35,35);
+    width: 90%;
+    height: 2px;
+    background-color: rgb(50,50,50);
+    margin-bottom: 50px;
+}
+
+.hrArticles
+{
+    border: 0px dashed black;
+    border-top: 1px solid rgb(35,35,35);
+    width: 70%;
+    height: 2px;
+    background-color: rgb(50,50,50);
+}
+
+article
+{
+    color: rgb(160,160,160);
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: justify;
+    font-size: 13px;
+    
+}
+
+.titreArticle
+{
+    color: rgb(250,250,250);
+    font-family: 'Text Me One';
+    font-size: 20px;
+    margin-bottom: 0px;
+}
+
+.auteur
+{
+    margin: 0px 0px 0px 0px;
+    color: rgb(250,250,250);
+    font-size: 13px;
+}
+
+time
+{
+    color: rgb(220,220,220);
+    font-size: 10px;
+    margin-top: 0px;
+}
+
+.CategorieArticle
+{
+    color: rgb(220,220,220);
+    font-size: 10px;
+    margin-top: 0px;
+}
+
+.headerArticle
+{
+    text-shadow: 0px 0px 2px rgb(0,0,0);
+    margin-bottom: 20px;
+}
+
+.footerArticle
+{
+    text-shadow: 0px 0px 2px rgb(0,0,0);
+    color: rgb(250,250,250);
+    margin-top: 20px;
+}
+
+.basPage
+{
+    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+    color: rgb(220,220,220);
+    clear: both;
+    margin-top: 50px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 0px 0px 0px 0px;
+    background-color: rgb(30,30,30);
+    box-shadow: 0px 0px 10px rgb(0,0,0);
+}
