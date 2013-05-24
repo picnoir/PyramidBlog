@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from utilities import read_file
+import codecs
 
 try:
     import markdown
@@ -13,8 +13,9 @@ class MarkdownReader:
     
     def read(self, filePath):
         """Return metadatas and content of a markdown file"""
-        
-        mdContent=read_file(filePath)
-        md = markdown.Markdown(extensions = ['meta'])
+
+        with codecs.open(filePath, 'r', 'utf-8') as fileToRead:
+            mdContent= fileToRead.read()
+        md = markdown.Markdown(extensions = ['meta','codehilite'])
         htmlContent=md.convert(mdContent)
         return htmlContent,md.Meta

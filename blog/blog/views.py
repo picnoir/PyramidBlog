@@ -1,7 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 from models import Article
@@ -22,7 +22,7 @@ def blog_list_view(request):
         page=0
     if (page > nbArticles/articlesByPage):
         page=0
-    query = session.query(Article).order_by('id')\
+    query = session.query(Article).order_by(desc('id'))\
          [page : (page + articlesByPage)]
     for article in query:
         renderDictList.append({'title' : article.title,\
