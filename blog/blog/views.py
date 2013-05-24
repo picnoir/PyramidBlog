@@ -28,7 +28,8 @@ def blog_list_view(request):
         renderDictList.append({'title' : article.title,\
                                'date' : article.date.strftime("%d/%m/%y %H:%M"),\
                                'author' : article.author,\
-                               'content' : article.content})
+                               'content' : article.content,\
+                               'id' : article.id})
     return {'renderDictList' : renderDictList}
 
 def blog_article_view(request):

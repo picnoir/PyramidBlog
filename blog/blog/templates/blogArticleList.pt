@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="static/style.css" />
+    <link rel="stylesheet" href="/static/style.css" />
     <link href='http://fonts.googleapis.com/css?family=Text+Me+One' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
     <title>Alternativebit</title>
@@ -11,16 +11,18 @@
   <body>
     <div class="page">
       <header>
-	<div class="titre"></div>
+	<div class="titre"> </div>
       </header>
       <div class="blocPrincipal"> 
 	<h2 class="sectionTitle">Blog</h2>
 	<hr class="titreHr" />
 
-
+	
 	<article tal:repeat="article renderDictList">
 	  <header class="headerArticle">
-	    <h3 class="titreArticle"> ${article['title']} </h3>
+	    <h3 class="titreArticle">
+	      <a class="design" href="/article/${article['id']}"> ${article['title']} </a> 
+	    </h3>
 	    <p class="auteur">Par ${article['author']} </p>
 	    <time> ${article['date']} </time>
 	    <p class="CategorieArticle">
@@ -28,38 +30,37 @@
 	  </header>
 	  <div class="content" tal:content="structure article['content']"> 
 	  </div>
+	  <div class="footerArticle"> <a class="design" href="/article/${article['id']}"> Lire la suite </a> </div>
 	  <hr class="hrArticles" />
 	</article>
-
-
-</div>
-
-	<aside class="menu">
-	  <hr class="menuHr"/>
-	  <ul class="menuPrincipal">
-	    <li>Blog</li>
-	    <li>Projets</li>
-	  </ul>
-	  <hr class="menuHr"/>
-	  <p class="titreCat">Categories</p>
-	  <hr class="catHr"/>
-	  <ul class="categories">
-	    <li>
-	      <p class="categorie">Informatique</p>
-	    </li>
-	    <li>
-	      <p class="categorie">Critique</p>
-	    </li>
-	    <li>
-	      <p class="categorie">Divers</p>
-	    </li>
-	  </ul>
-	  <hr class="catHr"/>
-	</aside>
-	<footer class="basPage">
-	  <p>Les articles de ce blog pour lesquels aucune licence n'est spécifiée sont sous licence <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
-	  <p>Le code source écrit par l'auteur et publié sur ce blog peut être considéré sous licence <a href="https://www.freebsd.org/copyright/license.html">BSD</a> sauf si mention contraire. </p>
-	</footer>
       </div>
+
+      <aside class="menu">
+	<hr class="menuHr"/>
+	<ul class="menuPrincipal">
+	  <li> <a class="menuPrincipal" href="/"> Blog </a> </li>
+	  <li> <a class="menuPrincipal" href="/project/"> Projets </a> </li>
+	</ul>
+	<hr class="menuHr"/>
+	<p class="titreCat">Categories</p>
+	<hr class="catHr"/>
+	<ul class="categories">
+	  <li>
+	    <p class="categorie">Informatique</p>
+	  </li>
+	  <li>
+	    <p class="categorie">Critique</p>
+	  </li>
+	  <li>
+	    <p class="categorie">Divers</p>
+	  </li>
+	</ul>
+	<hr class="catHr"/>
+      </aside>
+      <footer class="basPage">
+	<p>Les articles de ce blog pour lesquels aucune licence n'est spécifiée sont sous licence <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
+	<p>Le code source écrit par l'auteur et publié sur ce blog peut être considéré sous licence <a href="https://www.freebsd.org/copyright/license.html">BSD</a> sauf si mention contraire. </p>
+      </footer>
+    </div>
   </body>
 </html>
