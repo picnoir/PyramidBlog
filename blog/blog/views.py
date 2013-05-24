@@ -20,10 +20,14 @@ def blog_list_view(request):
         page = request.matchdict['page']
     except KeyError:
         page=0
-    if (page > nbArticles/articlesByPage):
+    try:
+        page = int(page)
+    except ValueError:
+        page=0
+    if (page > nbArticles/articlesByPage - 1):
         page=0
     query = session.query(Article).order_by(desc('id'))\
-         [page : (page + articlesByPage)]
+         [(articlesByPage * page) : (page * articlesByPage) + articlesByPage]
     for article in query:
         renderDictList.append({'title' : article.title,\
                                'date' : article.date.strftime("%d/%m/%y %H:%M"),\
