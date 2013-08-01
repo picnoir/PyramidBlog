@@ -4,7 +4,8 @@ import sys
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, DateTime, String, Integer
+from sqlalchemy import Column, DateTime, String, Integer, Table
+from sqlalchemy import ForeignKey
 
 from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
@@ -83,3 +84,26 @@ class Article(Base):
 
     def __repr__(self):
         return "<Article(%s by '%s')>" % (self.title, self.author)
+
+class Category(Base):
+    """Category class
+
+    This class represents a cathegory. Categorys must be
+    created manually in the database before adding an article.
+    """
+
+    __tablename__ = 'category'
+
+    id = Column(Integer, primary_key = True)
+    name = Column(String)
+
+
+
+"Association tables"
+association_category_article_table = \
+  Table('articleCategory', Base.metadata,
+        Column('category_id', Integer, ForeignKey('category.id')),
+        Column('article_id', Integer, ForeignKey('article.id'))
+        )
+
+
