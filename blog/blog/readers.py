@@ -4,7 +4,8 @@ from utilities import read_file
 try:
     import markdown
 except ImportError:
-    Markdown = False
+    print "Markdown seems to be absent on your\
+    system"
 
 
 class MarkdownReader:

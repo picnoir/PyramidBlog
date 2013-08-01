@@ -69,7 +69,7 @@ class Article(Base):
             self.date=date[0]
         except KeyError:
             print("No date specified in the markdown file.\
-            Choising today's date for this article.")
+            Choosing today's date for this article.")
             self.date = datetime.now()
             if self.date==None:
                 print "Exiting"
@@ -103,7 +103,7 @@ class Category(Base):
 association_category_article_table = \
   Table('articleCategory', Base.metadata,
         Column('category_id', Integer, ForeignKey('category.id')),
-        Column('article_id', Integer, ForeignKey('article.id'))
+        Column('article_id', Integer, ForeignKey('articles.id'))
         )
 
 

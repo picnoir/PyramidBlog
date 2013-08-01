@@ -3,8 +3,8 @@
 def read_file(filePath):
     """Read containt of filePath"""
 
-    fileWanted=open(filePath,'r')
-    string=fileWanted.read()
+    fileWanted=open(filePath, mode='r')
+    string=fileWanted.read().decode("utf-8")
     fileWanted.close()
     return string
 
