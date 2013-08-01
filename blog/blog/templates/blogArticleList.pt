@@ -34,6 +34,10 @@
 	  <div class="footerArticle"> <a class="design" href="/article/${article['id']}"> Lire la suite </a> </div>
 	  <hr class="hrArticles" />
 	</article>
+	<div class="pages"> 
+	  Pages:
+	  <a class="design" tal:repeat="page pageList" href="/blog/${page-1}"> ${page} </a>  
+	</div>
       </div>
 
       <aside class="menu">

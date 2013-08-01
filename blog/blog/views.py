@@ -16,6 +16,7 @@ def blog_list_view(request):
     articlesByPage = 5
     renderDictList = []
     nbArticles = session.query(Article).count()
+    nbPageList = range(1,nbArticles/articlesByPage + 1)
     try:
         page = request.matchdict['page']
     except KeyError:
@@ -34,7 +35,7 @@ def blog_list_view(request):
                                'author' : article.author,\
                                'content' : article.content[:200]+" ...",\
                                'id' : article.id})
-    return {'renderDictList' : renderDictList}
+    return {'renderDictList' : renderDictList, 'pageList' : nbPageList}
 
 def blog_article_view(request):
     """Display a blog article.
