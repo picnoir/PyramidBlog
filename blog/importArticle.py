@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from models import Article, create_db_tables
+from blog.models import Article, create_db_tables
 
 import sys
 
