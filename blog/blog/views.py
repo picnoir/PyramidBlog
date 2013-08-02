@@ -6,14 +6,13 @@ from pyramid.httpexceptions import (HTTPNotFound,
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
-from models import Article, dbEngine
+from models import Article, dbSession
 
 def blog_list_view(request):
     """Homepage view.
     Displays recent blog post list"""
 
-    Session = sessionmaker(bind=dbEngine)
-    session = Session()
+    session = dbSession()
     articlesByPage = 5
     renderDictList = []
     nbArticles = session.query(Article).count()
@@ -47,13 +46,13 @@ def blog_list_view(request):
                                'author' : article.author,\
                                'content' : article.content[:200]+" ...",\
                                'id' : article.id})
+    session.close()
     return {'renderDictList' : renderDictList, 'pageList' : nbPageList}
 
 def blog_article_view(request):
     """Display a blog article.
     """
-    Session = sessionmaker(bind=dbEngine)
-    session = Session()
+    session = dbSession()
     try:
         articleId = request.matchdict['articleId']
     except KeyError:
@@ -68,6 +67,7 @@ def blog_article_view(request):
                            'date' : article.date.strftime("%d/%m/%y %H:%M"),\
                            'author' : article.author,\
                            'content' : article.content}
+    session.close()
     return {'article' : renderDict}
 
         
