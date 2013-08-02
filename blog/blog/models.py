@@ -6,11 +6,19 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, DateTime, String, Integer, Table
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
 
 Base = declarative_base()
+
+"Association tables"
+category_article = \
+  Table('articleCategory', Base.metadata,
+        Column('category_id', Integer, ForeignKey('category.id')),
+        Column('article_id', Integer, ForeignKey('articles.id'))
+        )
 
 def create_db_tables(engine):
     Base.metadata.create_all(engine)
@@ -29,6 +37,9 @@ class Article(Base):
     date = Column(DateTime)
     author = Column(String)
     content = Column(String)
+    categories = relationship('Category', \
+                            secondary=category_article,\
+                            backref='articles')
     
     def __init__(self, mdFilePath, title=None, date=None,  author=None,\
                  content=None, categories=None):
@@ -43,7 +54,9 @@ class Article(Base):
             self.date=date
             self.author=author
             self.content=content
-            self.categories=categories
+            self.categories = []
+            for category in categories:
+                self.categories.append(Category(category))
         else:
             md=MarkdownReader()
             self.content, meta=md.read(mdFilePath)
@@ -55,7 +68,9 @@ class Article(Base):
         """Analyse and process meta caracteristics dictionnary """
         
         try:
-            self.categories=meta['categories'][0]
+            categoriesStringList=meta['categories']
+            for categoryString in categoriesStringList:
+                self.categories.append(Category(categoryString))
         except:
             self.categories=None
         try:
@@ -93,17 +108,17 @@ class Category(Base):
     """
 
     __tablename__ = 'category'
-
     id = Column(Integer, primary_key = True)
-    name = Column(String)
+    name = Column(String, nullable = False, unique = True)
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "<Category %s>" % (self.name)
 
 
 
-"Association tables"
-association_category_article_table = \
-  Table('articleCategory', Base.metadata,
-        Column('category_id', Integer, ForeignKey('category.id')),
-        Column('article_id', Integer, ForeignKey('articles.id'))
-        )
+
 
 
