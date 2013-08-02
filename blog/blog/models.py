@@ -68,11 +68,12 @@ class Article(Base):
         """Analyse and process meta caracteristics dictionnary """
         
         try:
-            categoriesStringList=meta['categories']
-            for categoryString in categoriesStringList:
+            categoriesString=meta['categories']
+            for categoryString in categoriesString[0].split(', '):
                 self.categories.append(Category(categoryString))
-        except:
-            self.categories=None
+        except e:
+            print
+            self.categories=[]
         try:
             author=meta['author']
             self.author=author[0]
