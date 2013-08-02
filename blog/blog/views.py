@@ -1,3 +1,4 @@
+
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
 
@@ -17,6 +18,8 @@ def blog_list_view(request):
     renderDictList = []
     nbArticles = session.query(Article).count()
     nbPageList = range(1,nbArticles/articlesByPage + 1)
+    if nbPageList == []:
+        nbPageList.append(1)
     try:
         page = request.matchdict['page']
     except KeyError:
@@ -27,8 +30,17 @@ def blog_list_view(request):
         page=0
     if (page > nbArticles/articlesByPage - 1):
         page=0
-    query = session.query(Article).order_by(desc('id'))\
-         [(articlesByPage * page) : (page * articlesByPage) + articlesByPage]
+    try:
+        category = request.matchdict['category']
+        query = session.query(Article).order_by(desc('id')).\
+          filter(Article.categories.any(name=category))\
+            [(articlesByPage * page) :\
+             (page * articlesByPage) + articlesByPage]
+    except KeyError:
+        query = session.query(Article).order_by(desc('id'))\
+          [(articlesByPage * page) :\
+           (page * articlesByPage) + articlesByPage]        
+         
     for article in query:
         renderDictList.append({'title' : article.title,\
                                'date' : article.date.strftime("%d/%m/%y %H:%M"),\
