@@ -1,18 +1,18 @@
 
 from pyramid.view import view_config
-from pyramid.httpexceptions import HTTPNotFound, HTTPInternalServerError
+from pyramid.httpexceptions import (HTTPNotFound,
+                                    HTTPInternalServerError)
 
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
-from models import Article
+from models import Article, dbEngine
 
 def blog_list_view(request):
     """Homepage view.
     Displays recent blog post list"""
 
-    engine = create_engine('sqlite:///:blog:')
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=dbEngine)
     session = Session()
     articlesByPage = 5
     renderDictList = []
@@ -52,8 +52,7 @@ def blog_list_view(request):
 def blog_article_view(request):
     """Display a blog article.
     """
-    engine = create_engine('sqlite:///:blog:')
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=dbEngine)
     session = Session()
     try:
         articleId = request.matchdict['articleId']

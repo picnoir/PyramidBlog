@@ -1,14 +1,14 @@
 #-*- coding:utf-8 -*-
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
-from blog.models import Article, create_db_tables
+from blog.models import (Article,
+                         create_db_tables,
+                         dbSession,
+                         dbEngine)
 
 import sys
 
-engine = create_engine('sqlite:///:blog:', echo = True)
-create_db_tables(engine)
-Session = sessionmaker(bind=engine)
+create_db_tables(dbEngine)
 
 try:
     fileName = sys.argv[1]
@@ -21,6 +21,7 @@ except IOError:
     sys.stderr.write('Nom de fichier incorrect.')
     sys.exit(-1)
 
-session = Session()
+session = dbSession()
+session.close_all()
 session.add(article)
 session.commit()

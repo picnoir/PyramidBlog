@@ -4,14 +4,23 @@ import sys
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, DateTime, String, Integer, Table
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import (Column,
+                        DateTime,
+                        String,
+                        Integer,
+                        Table,
+                        ForeignKey,
+                        create_engine)
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 
 from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
 
 Base = declarative_base()
+dbEngine = create_engine('sqlite:///:blog:', echo=True)
+dbSession = sessionmaker(bind=dbEngine)
+
 
 "Association tables"
 category_article = \
@@ -55,8 +64,15 @@ class Article(Base):
             self.author=author
             self.content=content
             self.categories = []
-            for category in categories:
-                self.categories.append(Category(category))
+            session = dbSession()
+            for categoryName in categories:
+                try:
+                    category = session.query(Category).\
+                      filter(Category.name == categoryName).one()
+                except NoResultFound:
+                    category = Category(categoryName)
+                self.categories.append(category)
+            session.close()
         else:
             md=MarkdownReader()
             self.content, meta=md.read(mdFilePath)
@@ -64,15 +80,23 @@ class Article(Base):
                 self._process_meta(meta)
             except TooMuchMetaCarac, e:
                 print e
+
+                
     def _process_meta(self, meta):
         """Analyse and process meta caracteristics dictionnary """
-        
+
         try:
-            categoriesString=meta['categories']
-            for categoryString in categoriesString[0].split(', '):
-                self.categories.append(Category(categoryString))
-        except e:
-            print
+            allCategoriesString=meta['categories']
+            session = dbSession()
+            for categoryName in allCategoriesString[0].split(', '):
+                  try:
+                      category = session.query(Category).\
+                      filter(Category.name == categoryName).one()
+                  except:
+                       category = Category(categoryName)
+            self.categories.append(category)
+            session.close()
+        except KeyError:
             self.categories=[]
         try:
             author=meta['author']
@@ -98,9 +122,11 @@ class Article(Base):
             exiting.")
             sys.exit(-1)
 
+            
     def __repr__(self):
         return "<Article(%s by '%s')>" % (self.title, self.author)
 
+    
 class Category(Base):
     """Category class
 
