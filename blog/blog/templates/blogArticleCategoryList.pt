@@ -36,7 +36,7 @@
 	</article>
 	<div class="pages"> 
 	  Pages:
-	  <a class="design" tal:repeat="page pageList" href="/blog/${page-1}"> ${page} </a>  
+	  <a class="design" tal:repeat="page pageList" href="/blog/${page-1}/{category}"> ${page} </a>  
 	</div>
       </div>
 

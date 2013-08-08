@@ -19,7 +19,7 @@ def main(global_config, **settings):
                     renderer="blog:templates/blogArticle.pt")
     config.add_view('blog.views.blog_list_view', \
                     route_name='homeValuedCategorized',\
-                    renderer='blog:templates/blogArticleList.pt')
+                    renderer='blog:templates/blogArticleCategoryList.pt')
 
     
     return config.make_wsgi_app()

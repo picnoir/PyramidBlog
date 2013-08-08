@@ -44,22 +44,23 @@
 	  <hr class="menuHr"/>
 	  <p class="titreCat">Categories</p>
 	  <hr class="catHr"/>
-	  <ul class="categories">
-	    <li>
-	      <p class="categorie">Informatique</p>
-	    </li>
-	    <li>
-	      <p class="categorie">Critique</p>
-	    </li>
-	    <li>
-	      <p class="categorie">Divers</p>
-	    </li>
-	  </ul>
+	<ul class="categories">
+	  <li>
+	    <p class="categorie"> <a class="categorie" href="/blog/0/Informatique">Informatique</a> </p>
+	  </li>
+	  <li>
+	    <p class="categorie"><a class="categorie" href="/blog/0/Cinema">Cinema</a></p>
+	  </li>
+	  <li>
+	    <p class="categorie"><a class="categorie" href="/blog/0/Divers">Divers</a></p>
+	  </li>
+	</ul>
 	  <hr class="catHr"/>
 	</aside>
 	<footer class="basPage">
 	  <p>Les articles de ce blog pour lesquels aucune licence n'est spécifiée sont sous licence <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
 	  <p>Le code source écrit par l'auteur et publié sur ce blog peut être considéré sous licence <a href="https://www.freebsd.org/copyright/license.html">BSD</a> sauf si mention contraire. </p>
+	  <p>Le code source de ce site est disponible sur <a href="https://github.com/NinjaTrappeur/PyramidBlog">github</a>. <p>
 	</footer>
       </div>
   </body>

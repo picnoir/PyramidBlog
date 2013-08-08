@@ -15,6 +15,7 @@ def blog_list_view(request):
     session = dbSession()
     articlesByPage = 5
     renderDictList = []
+    category = None
     nbArticles = session.query(Article).count()
     nbPageList = range(1,nbArticles/articlesByPage + 1)
     if nbPageList == []:
@@ -47,7 +48,7 @@ def blog_list_view(request):
                                'content' : article.content[:200]+" ...",\
                                'id' : article.id})
     session.close()
-    return {'renderDictList' : renderDictList, 'pageList' : nbPageList}
+    return {'renderDictList' : renderDictList, 'pageList' : nbPageList, 'category' : category}
 
 def blog_article_view(request):
     """Display a blog article.
