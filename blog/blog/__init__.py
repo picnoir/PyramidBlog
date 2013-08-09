@@ -11,6 +11,8 @@ def main(global_config, **settings):
     config.add_route('homeValuedCategorized', '/blog/{page}/{category}')
     config.add_route('home','/')
     config.add_route('article','/article/{articleId}')
+    config.add_route('atom','/atom')
+    
     config.add_view('blog.views.blog_list_view', route_name='homeValued',\
                     renderer="blog:templates/blogArticleList.pt")
     config.add_view('blog.views.blog_list_view', route_name='home',\
@@ -20,6 +22,7 @@ def main(global_config, **settings):
     config.add_view('blog.views.blog_list_view', \
                     route_name='homeValuedCategorized',\
                     renderer='blog:templates/blogArticleCategoryList.pt')
+    config.add_view('blog.views.atom', route_name='atom')
 
     
     return config.make_wsgi_app()

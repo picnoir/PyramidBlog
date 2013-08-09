@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="/static/style.css" />
     <link rel="stylesheet" href="/static/pygmentStyles.css" />
+    <link href="/atom" rel="self" type="application/atom+xml" />
     <link href='http://fonts.googleapis.com/css?family=Text+Me+One' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
     <title>Alternativebit</title>
@@ -59,7 +60,7 @@
 	</aside>
 	<footer class="basPage">
 	  <p>Les articles de ce blog pour lesquels aucune licence n'est spécifiée sont sous licence <a rel="license" href="http://creativecommons.org/licenses/by/3.0/deed.fr"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a></p>
-	  <p>Le code source écrit par l'auteur et publié sur ce blog peut être considéré sous licence <a href="https://www.freebsd.org/copyright/license.html">BSD</a> sauf si mention contraire. </p>
+	  <p>Flux atom disponible: <a href="/atom"><img alt="Atom syndication" src="/static/Images/atom.png" /></a></p>
 	  <p>Le code source de ce site est disponible sur <a href="https://github.com/NinjaTrappeur/PyramidBlog">github</a>. <p>
 	</footer>
       </div>

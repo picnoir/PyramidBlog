@@ -18,7 +18,7 @@ from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
 
 Base = declarative_base()
-dbEngine = create_engine('sqlite:///:blog:', echo=True)
+dbEngine = create_engine('sqlite:///:blog:')
 dbSession = sessionmaker(bind=dbEngine)
 
 
