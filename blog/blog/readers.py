@@ -16,6 +16,6 @@ class MarkdownReader:
         """Return metadatas and content of a markdown file"""
         
         mdContent=read_file(filePath)
-        md = markdown.Markdown(extensions = ['meta'])
+        md = markdown.Markdown(extensions = ['meta', 'codehilite'])
         htmlContent=md.convert(mdContent)
         return htmlContent,md.Meta
