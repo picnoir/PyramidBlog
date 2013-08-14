@@ -40,7 +40,6 @@
 	  <hr class="menuHr"/>
 	  <ul class="menuPrincipal">
 	    <li> <a class="menuPrincipal" href="/">Blog </a> </li>
-	    <li> <a class="menuPrincipal" href="/projects/"> Projets </a> </li>
 	  </ul>
 	  <hr class="menuHr"/>
 	  <p class="titreCat">Categories</p>

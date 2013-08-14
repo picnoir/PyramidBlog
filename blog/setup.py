@@ -10,11 +10,15 @@ requires = [
     'pyramid',
     'pyramid_debugtoolbar',
     'waitress',
-    'pyatom'
+    'pyatom',
+    'sqlalchemy',
+    'pyatom',
+    'markdown',
+    'pygments'
     ]
 
 setup(name='blog',
-      version='0.0',
+      version='0.1',
       description='blog',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -23,9 +27,9 @@ setup(name='blog',
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
         ],
-      author='',
+      author='Ninja Trappeur',
       author_email='',
-      url='',
+      url='alternativebit.fr',
       keywords='web pyramid pylons',
       packages=find_packages(),
       include_package_data=True,

@@ -48,10 +48,12 @@ def blog_list_view(request):
         renderDictList.append({'title' : article.title,\
                                'date' : article.date.strftime("%d/%m/%y %H:%M"),\
                                'author' : article.author,\
-                               'content' : article.content[:200]+" ...",\
+                               'content' : article.content\
+                                [:article.content.rfind('</p>',0,200)]+" ...",\
                                'id' : article.id})
     session.close()
-    return {'renderDictList' : renderDictList, 'pageList' : nbPageList, 'category' : category}
+    return {'renderDictList' : renderDictList,\
+            'pageList' : nbPageList, 'category' : category}
 
 def blog_article_view(request):
     """Display a blog article.
