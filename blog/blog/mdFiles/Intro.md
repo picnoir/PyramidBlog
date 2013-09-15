@@ -1,4 +1,4 @@
-author: Félix
+author: NinjaTrappeur
 title: Introduction terriblement banale
 categories: Divers
 
