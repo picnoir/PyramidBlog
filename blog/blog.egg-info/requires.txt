@@ -1,3 +1,7 @@
 pyramid
 pyramid_debugtoolbar
 waitress
+sqlalchemy
+pyatom
+markdown
+pygments
