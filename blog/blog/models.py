@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 
 import sys
+import hashlib
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,11 +14,15 @@ from sqlalchemy import (Column,
                         create_engine)
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from pyramid.security import (Everyone,
+                              Allow,
+                              Authenticated)
 
 from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
 
 Base = declarative_base()
+#dbEngine = create_engine('sqlite:///:blog:')
 dbEngine = create_engine('sqlite:////home/flex/www/alternativebit/public_html/Blog/blog/blog/bdd.sqlite')
 dbSession = sessionmaker(bind=dbEngine)
 
@@ -38,8 +43,8 @@ class Article(Base):
     informations about an blog article such as author, date, content,
     etc... Base is a declarative sqlachemy's base. This must be declared
     in the main file of the application."""
+    
     __tablename__ = 'articles'
-        
     id = Column(Integer, primary_key = True)
     title = Column(String)
     date = Column(DateTime)
@@ -72,7 +77,7 @@ class Article(Base):
                 except NoResultFound:
                     category = Category(categoryName)
                 self.categories.append(category)
-                session.close()
+            session.close()
         else:
             md=MarkdownReader()
             self.content, meta=md.read(mdFilePath)
@@ -125,7 +130,7 @@ class Article(Base):
     
     def __repr__(self):
         
-        return "<Article(%s by '%s')>" % (self.title, self.author)
+        return "<Article (%s by '%s')>" % (self.title, self.author)
                                                                                       
 
 class Category(Base):
@@ -145,8 +150,92 @@ class Category(Base):
     def __repr__(self):
         return "<Category %s>" % (self.name)
                                                                                               
-                                                                                              
-                                                                                              
-                                                                                              
-                                                                                              
-                                                                                              
+
+class User(Base):
+    """User class
+
+    This class represents a user. Users are stored in the
+    same database than articles and projects.
+    """
+
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key = True)
+    name = Column(String, nullable = False, unique = True)
+    password = Column(String, nullable = False)
+    group = Column(String)
+    projects = relationship("Project")
+
+    def __init__(self, name, password, group):
+        self.name = name
+        self.password = hashlib.sha512(password).hexdigest()
+        self.group = group
+
+    def __repr__(self):
+        return "<User %s>" % (self.name)
+
+    @classmethod
+    def check_user_password(cls, name, password):
+        """Predicate that check if the password of an user
+        is correct.
+        """
+
+        session = dbSession()
+        try:
+            user = session.query(User).\
+                filter(User.name == name).one()
+        except NoResultFound:
+            return False
+        session.close()
+        return (user.password == hashlib.sha512(password).hexdigest())
+
+    @classmethod
+    def find_user(cls, username):
+        """Find a user in the database.
+
+        Returns false if the user don't exists, else the user
+        object
+        """
+          
+        session = dbSession()
+        try:
+            user = session.query(User).\
+                filter(User.name == username).one()
+        except NoResultFound:
+            return False
+        session.close()
+        return user
+
+            
+class Project(Base):
+    """Project class
+
+    This class represents a project.
+    Take care when you create a project object:
+    the author have to exist in the db. If not,
+    shit may happens!
+    """
+
+    __tablename__ = "projects"
+    id = Column(Integer, primary_key = True)
+    title = Column(String, nullable = False)
+    content = Column(String)
+    author = Column(Integer, ForeignKey('users.id'))
+
+    def __init__(self, title, content, author):
+        self.title = title
+        self.content = content
+        session = dbSession()
+        self.author = session.query(User).\
+            filter(User.name == author).one()
+
+    def __repr__(self):
+        return "<Project %s>" % (self.title)
+
+class RootFactory(object):
+    __acl__ = [
+        (Allow, Everyone, 'view'),
+        (Allow, Authenticated, 'admin')
+    ]
+
+    def __init__(self, request):
+        pass # pragma: no cover

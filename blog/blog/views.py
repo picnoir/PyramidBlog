@@ -2,14 +2,18 @@
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPNotFound,
-                                    HTTPInternalServerError)
+                                    HTTPInternalServerError,
+                                    HTTPFound)
+from pyramid.security import remember, forget, authenticated_userid
 
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
 
 from pyatom import AtomFeed
 
-from models import Article, dbSession
+from models import (Article,
+                    dbSession,
+                    User)
 
 def blog_list_view(request):
     """Homepage view.
@@ -97,3 +101,30 @@ def atom(request):
          updated=article.date)
     return Response(feed.to_string())
        
+def login(request):
+    """Login view
+    """
+
+    previous_location = request.params.get('came_from',
+                                            request.route_url('home'))
+    post_data = request.POST
+    if 'submit' in post_data:
+        username = post_data['username']
+        password = post_data['password']
+        if User.check_user_password(username, password):
+            headers = remember(request, username)
+            request.session.flash('Log in.')
+            return HTTPFound(location=previous_location,\
+                headers = headers)
+    request.session.flash('Wrong username or password.')
+    return HTTPFound(location=previous_location)
+        
+def logout(request):
+    """Logout view
+    """
+
+    request.session.invalidate()
+    request.session.flash('Log out.')
+    headers = forget(request)
+    return HTTPFound(location=request.route_url('home'),\
+                     headers=headers)
