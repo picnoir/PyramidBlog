@@ -4,7 +4,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPNotFound,
                                     HTTPInternalServerError,
                                     HTTPFound)
-from pyramid.security import remember, forget, authenticated_userid
+from pyramid.security import remember, forget
 
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker
@@ -13,7 +13,8 @@ from pyatom import AtomFeed
 
 from models import (Article,
                     dbSession,
-                    User)
+                    User,
+                    Project)
 
 def blog_list_view(request):
     """Homepage view.
@@ -92,6 +93,7 @@ def atom(request):
                 author="Ninja Trappeur")
     session = dbSession()
     query = session.query(Article).order_by(desc('id'))[0:14]
+    session.close()
     for article in query:
         feed.add(title=article.title,
          content=article.content,
@@ -128,3 +130,43 @@ def logout(request):
     headers = forget(request)
     return HTTPFound(location=request.route_url('home'),\
                      headers=headers)
+
+def admin_article(request):
+    """Displays a list of the articles
+    in the admin section"""
+    
+    session = dbSession()
+    articleList = session.query(Article).order_by(desc('id'))[0:50]
+    session.close()
+    renderDictList = []
+    for article in articleList:
+        renderDictList.append({'id':article.id,
+             'name':article.title})
+    return{'elementDictList':renderDictList, 'elementType':'article'}
+
+    
+def admin_user(request):
+    """Displays a list of the users
+    in the admin section"""
+    
+    session = dbSession()
+    usersList = session.query(User).order_by(desc('id'))[0:50]
+    session.close()
+    renderDictList = []
+    for user in usersList:
+        renderDictList.append({'id':user.id,
+             'name':user.name})
+    return{'elementDictList':renderDictList, 'elementType':'user'}
+
+def admin_project(request):
+    """Displays a list of the projects
+    in the admin section"""
+    
+    session = dbSession()
+    projectsList = session.query(Project).order_by(desc('id'))[0:50]
+    session.close()
+    renderDictList = []
+    for project in projectsList:
+        renderDictList.append({'id':project.id,
+             'name':project.title})
+    return{'elementDictList':renderDictList, 'elementType':'project'}

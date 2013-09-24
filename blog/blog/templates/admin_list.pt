@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <style type="text/css">
+    body {
+    margin:auto;
+    text-align:center;
+    }
+    table {
+    margin:auto;
+    text-align:center;
+    }
+  </style>
+  <body>
+    <h1> Admin: ${elementType} </h1>
+    <a href="/admin/user">Users</a>
+    <a href="/admin/article">Articles</a>
+    <a href="/admin/project">Projects</a>
+
+    <table border=1>
+      <tr> 
+	<td>Id</td>
+	<td>Name</td>
+	<td></td>
+      </tr>
+      <tr tal:repeat="element elementDictList">
+	<td>${element['id']}</td>
+	<td>${element['name']}</td>
+	<td>
+	  <a href="/admin/${elementType}/${element['id']}">Modifier</a> 
+	  <a href="/admin/${elementType}/del/${element['id']}">Supprimer</a> 
+      </tr>
+    </table>
+
+  </body>
+</html>

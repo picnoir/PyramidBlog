@@ -22,8 +22,8 @@ from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
 
 Base = declarative_base()
-#dbEngine = create_engine('sqlite:///:blog:')
-dbEngine = create_engine('sqlite:////home/flex/www/alternativebit/public_html/Blog/blog/blog/bdd.sqlite')
+dbEngine = create_engine('sqlite:///:blog:')
+#dbEngine = create_engine('sqlite:////home/flex/www/alternativebit/public_html/Blog/blog/blog/bdd.sqlite')
 dbSession = sessionmaker(bind=dbEngine)
 
 
@@ -163,7 +163,6 @@ class User(Base):
     name = Column(String, nullable = False, unique = True)
     password = Column(String, nullable = False)
     group = Column(String)
-    projects = relationship("Project")
 
     def __init__(self, name, password, group):
         self.name = name
@@ -210,23 +209,18 @@ class Project(Base):
     """Project class
 
     This class represents a project.
-    Take care when you create a project object:
-    the author have to exist in the db. If not,
-    shit may happens!
     """
 
     __tablename__ = "projects"
     id = Column(Integer, primary_key = True)
     title = Column(String, nullable = False)
     content = Column(String)
-    author = Column(Integer, ForeignKey('users.id'))
+    author = Column(String)
 
     def __init__(self, title, content, author):
         self.title = title
         self.content = content
-        session = dbSession()
-        self.author = session.query(User).\
-            filter(User.name == author).one()
+        self.author = author
 
     def __repr__(self):
         return "<Project %s>" % (self.title)

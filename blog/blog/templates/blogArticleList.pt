@@ -27,7 +27,7 @@
 	    </h3>
 	    <p class="auteur">Par ${article['author']} </p>
 	    <time> ${article['date']} </time>
-	    <p class="CategorieArticle">
+	    <p class="CategorieArticle"> ${category}
 	    </p>
 	  </header>
 	  <div class="content" tal:content="structure article['content']"> 
