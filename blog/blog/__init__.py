@@ -67,16 +67,33 @@ def add_admin_routes(config):
     config.add_route('admin_home','/admin')
     config.add_route('admin_user','/admin/user')
     config.add_route('admin_project','/admin/project')
+    config.add_route('admin_view_user','/admin/user/{id}')
+    config.add_route('admin_add_user','/admin/user/add/{id}')
+    config.add_route('admin_del_user','/admin/user/del/{id}')
 
-    config.add_view('blog.views.admin_article',route_name='admin_article',
-                    renderer='blog:templates/admin_list.pt',                    
+    config.add_view('blog.views.admin_article',
+                    route_name='admin_article',
+                    renderer='blog:templates/admin_list.pt',
                     permission='admin')
-    config.add_view('blog.views.admin_article',route_name='admin_home',
-                    renderer='blog:templates/admin_list.pt',                    
+    config.add_view('blog.views.admin_article',
+                    route_name='admin_home',
+                    renderer='blog:templates/admin_list.pt',
                     permission='admin')
-    config.add_view('blog.views.admin_user',route_name='admin_user',
-                    renderer='blog:templates/admin_list.pt',                    
+    config.add_view('blog.views.admin_user',
+                    route_name='admin_user',
+                    renderer='blog:templates/admin_list.pt',
                     permission='admin')
-    config.add_view('blog.views.admin_project',route_name='admin_project',
-                    renderer='blog:templates/admin_list.pt',                    
+    config.add_view('blog.views.admin_project',
+                    route_name='admin_project',
+                    renderer='blog:templates/admin_list.pt',
+                    permission='admin')
+    config.add_view('blog.views.admin_view_user',
+                    route_name='admin_view_user',
+                    renderer='blog:templates/admin_user.pt',
+                    permission='admin')
+    config.add_view('blog.views.admin_add_user',
+                    route_name='admin_add_user',
+                    permission='admin')
+    config.add_view('blog.views.admin_del_user',
+                    route_name='admin_del_user',
                     permission='admin')

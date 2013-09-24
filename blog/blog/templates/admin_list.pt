@@ -15,9 +15,15 @@
   </style>
   <body>
     <h1> Admin: ${elementType} </h1>
-    <a href="/admin/user">Users</a>
-    <a href="/admin/article">Articles</a>
-    <a href="/admin/project">Projects</a>
+    <p>
+      <a href="/admin/user">Users</a>
+      <a href="/admin/article">Articles</a>
+      <a href="/admin/project">Projects</a>
+    </p>
+    
+    <p>
+      <a href="/admin/${elementType}/-1">Add ${elementType}</a>
+    </p>
 
     <table border=1>
       <tr> 

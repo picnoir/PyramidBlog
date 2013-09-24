@@ -3,7 +3,8 @@ from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPNotFound,
                                     HTTPInternalServerError,
-                                    HTTPFound)
+                                    HTTPFound,
+                                    HTTPBadRequest)
 from pyramid.security import remember, forget
 
 from sqlalchemy import create_engine, desc
@@ -156,7 +157,8 @@ def admin_user(request):
     for user in usersList:
         renderDictList.append({'id':user.id,
              'name':user.name})
-    return{'elementDictList':renderDictList, 'elementType':'user'}
+    return{'elementDictList':renderDictList, 'elementType':'user',
+           'isUser':True}
 
 def admin_project(request):
     """Displays a list of the projects
@@ -170,3 +172,81 @@ def admin_project(request):
         renderDictList.append({'id':project.id,
              'name':project.title})
     return{'elementDictList':renderDictList, 'elementType':'project'}
+
+def admin_view_user(request):
+    """User formular.
+
+    You can change any username with this formular"""
+
+    session = dbSession()
+    try:
+        userId = request.matchdict['id']
+    except:
+        raise HTTPBadRequest()
+    if userId!='-1':
+        try:
+            user = session.query(User).\
+                filter(User.id == userId).one()
+        except:
+            raise HTTPBadRequest()
+        return{'username': user.name, 'id': userId,
+            'group': user.group,
+            'submitMessage':'Modify User'}
+    else:
+        return{'username':'', 'id': '-1',
+            'group': '',
+            'newUser':True,
+            'submitMessage':'Create user'}
+    
+def admin_add_user(request):
+    """Add a new user or modify
+    a user already registered in the database
+
+    If the request have an id variable, that means that
+    we will do a modification. Otherwise, the user is new."""
+
+    session = dbSession()
+    postData = request.POST
+    userId = request.matchdict['id']
+    if userId != '-1' :
+        if 'submit' in postData:
+                username = postData['username']
+                group = postData['group']
+                try:
+                        user=session.query(User)\
+                        .filter(User.id == userId).one()
+                        user.name = username
+                        user.group = group
+                except:
+                        session.close()
+                        raise HTTPBadRequest()
+
+        else:
+                raise HTTPBadRequest()
+    else:
+        if 'submit' in postData:
+                username = postData['username']
+                password = postData['password']
+                group = postData['group']
+                user = User(username, password, group)
+        else:
+            raise HTTPBadRequest()
+    session.add(user)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_user'))
+
+def admin_del_user(request):
+    """Delete the user given in request
+    matchdict"""
+
+    session = dbSession()
+    try:
+        userId = request.matchdict['id']
+        user = session.query(User).filter(User.id == userId).one()
+    except:
+        raise HTTPBadRequest
+    session.delete(user)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_user'))
