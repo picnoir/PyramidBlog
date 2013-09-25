@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.httpexceptions import (HTTPNotFound,
@@ -176,7 +178,7 @@ def admin_project(request):
 def admin_view_user(request):
     """User formular.
 
-    You can change any username with this formular"""
+    You can change any username or create one with this formular"""
 
     session = dbSession()
     try:
@@ -222,6 +224,7 @@ def admin_add_user(request):
                         raise HTTPBadRequest()
 
         else:
+                session.close()
                 raise HTTPBadRequest()
     else:
         if 'submit' in postData:
@@ -230,6 +233,7 @@ def admin_add_user(request):
                 group = postData['group']
                 user = User(username, password, group)
         else:
+            session.close()
             raise HTTPBadRequest()
     session.add(user)
     session.commit()
@@ -245,8 +249,98 @@ def admin_del_user(request):
         userId = request.matchdict['id']
         user = session.query(User).filter(User.id == userId).one()
     except:
+        session.close()
         raise HTTPBadRequest
     session.delete(user)
     session.commit()
     session.close()
     return HTTPFound(location=request.route_url('admin_user'))
+
+def admin_view_article(request):
+    """This view allow you to modify or create a blog
+    article"""
+
+    session = dbSession()
+    try:
+        articleId = request.matchdict['id']
+    except:
+        session.close()
+        raise HTTPBadRequest
+    if articleId != '-1':
+        try:
+            article = session.query(Article).\
+              filter(Article.id == articleId).one()
+        except:
+            session.close()
+            raise HTTPBadRequest
+        categoryNameList = []
+        for category in article.categories:
+            categoryNameList.append(category.name)
+        return{'id':articleId, 'title':article.title,
+               'date':article.date, 'author':article.author,
+               'content':article.content,
+               'categories':' ,'.join(categoryNameList),
+               'submitMessage':'Modify article'}
+    else:
+        return{'id':'-1', 'title':'',
+               'date':'', 'author':'',
+               'content':'',
+               'categories':'',
+               'submitMessage':'Create article'}
+
+        
+def admin_add_article(request):
+    """Add a new article or modify
+    an article already registered in the database
+
+    If the request have an id variable, that means that
+    we will do a modification. Otherwise, the article is new."""
+
+    session = dbSession()
+    postData = request.POST
+    articleId = request.matchdict['id']
+    if 'submit' in postData:
+        title = postData['title']
+        date = datetime.now()
+        categories = postData['categories'].split(' ,')
+        author = postData['author']
+        content = postData['content']
+    else:
+        session.close()
+        raise HTTPBadRequest()
+    if articleId != '-1' :
+        try:
+            article=session.query(Article)\
+                .filter(Article.id == articleId).one()
+        except:
+            session.close()
+            raise HTTPBadRequest()
+        article.title = title
+        article.date = date
+        article.author = author
+        article.content = content
+        article.set_categories_by_name(session,categories)
+    else:
+        article = Article(None, title, date, author, content, categories)
+    session.add(article)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_article'))
+
+
+def admin_del_article(request):
+    """Delete the article given in request
+    matchdict"""
+
+    session = dbSession()
+    try:
+        articleId = request.matchdict['id']
+        article = session.query(Article).\
+          filter(Article.id == articleId).one()
+    except:
+        session.close()
+        raise HTTPBadRequest
+    session.delete(article)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_article'))

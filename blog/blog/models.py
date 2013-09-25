@@ -68,15 +68,8 @@ class Article(Base):
             self.date=date
             self.author=author
             self.content=content
-            self.categories = []
             session = dbSession()
-            for categoryName in categories:
-                try:
-                    category = session.query(Category).\
-                        filter(Category.name == categoryName).one()
-                except NoResultFound:
-                    category = Category(categoryName)
-                self.categories.append(category)
+            self.set_categories_by_name(session,categories)
             session.close()
         else:
             md=MarkdownReader()
@@ -93,14 +86,10 @@ class Article(Base):
         try:
             allCategoriesString=meta['categories']
             session = dbSession()
-            for categoryName in allCategoriesString[0].split(', '):
-                try:
-                    category = session.query(Category).\
-                        filter(Category.name == categoryName).one()
-                except:
-                    category = Category(categoryName)
-                self.categories.append(category)
-                session.close()
+            self.set_categories_by_name(session,
+                                        allCategoriesString[0].\
+                                        split(' ,'))
+            session.close()
         except KeyError:
             self.categories=[]
         try:
@@ -126,6 +115,19 @@ class Article(Base):
             print("No title specified in the markdown file,\
             exiting.")
             sys.exit(-1)
+
+            
+    def set_categories_by_name(self, session, categoriesNameList):
+        """Set a list of categories to an article"""
+
+        self.categories = []
+        for categoryName in categoriesNameList:
+            try:
+                category = session.query(Category).\
+                    filter(Category.name == categoryName).one()
+            except:
+                category = Category(categoryName)
+            self.categories.append(category)
 
     
     def __repr__(self):

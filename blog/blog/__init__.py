@@ -70,6 +70,9 @@ def add_admin_routes(config):
     config.add_route('admin_view_user','/admin/user/{id}')
     config.add_route('admin_add_user','/admin/user/add/{id}')
     config.add_route('admin_del_user','/admin/user/del/{id}')
+    config.add_route('admin_view_article','/admin/article/{id}')
+    config.add_route('admin_add_article','/admin/article/add/{id}')
+    config.add_route('admin_del_article','/admin/article/del/{id}')
 
     config.add_view('blog.views.admin_article',
                     route_name='admin_article',
@@ -96,4 +99,14 @@ def add_admin_routes(config):
                     permission='admin')
     config.add_view('blog.views.admin_del_user',
                     route_name='admin_del_user',
+                    permission='admin')
+    config.add_view('blog.views.admin_view_article',
+                    route_name='admin_view_article',
+                    renderer='blog:templates/admin_article.pt',
+                    permission='admin')
+    config.add_view('blog.views.admin_add_article',
+                    route_name='admin_add_article',
+                    permission='admin')
+    config.add_view('blog.views.admin_del_article',
+                    route_name='admin_del_article',
                     permission='admin')
