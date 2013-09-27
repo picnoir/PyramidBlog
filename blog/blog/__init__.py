@@ -73,6 +73,9 @@ def add_admin_routes(config):
     config.add_route('admin_view_article','/admin/article/{id}')
     config.add_route('admin_add_article','/admin/article/add/{id}')
     config.add_route('admin_del_article','/admin/article/del/{id}')
+    config.add_route('admin_view_project','/admin/project/{id}')
+    config.add_route('admin_add_project','/admin/project/add/{id}')
+    config.add_route('admin_del_project','/admin/project/del/{id}')
 
     config.add_view('blog.views.admin_article',
                     route_name='admin_article',
@@ -109,4 +112,14 @@ def add_admin_routes(config):
                     permission='admin')
     config.add_view('blog.views.admin_del_article',
                     route_name='admin_del_article',
+                    permission='admin')
+    config.add_view('blog.views.admin_view_project',
+                    route_name='admin_view_project',
+                    renderer='blog:templates/admin_project.pt',
+                    permission='admin')
+    config.add_view('blog.views.admin_add_project',
+                    route_name='admin_add_project',
+                    permission='admin')
+    config.add_view('blog.views.admin_del_project',
+                    route_name='admin_del_project',
                     permission='admin')

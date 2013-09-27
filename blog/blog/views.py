@@ -302,7 +302,7 @@ def admin_add_article(request):
     if 'submit' in postData:
         title = postData['title']
         date = datetime.now()
-        categories = postData['categories'].split(' ,')
+        categories = postData['categories'].split(', ')
         author = postData['author']
         content = postData['content']
     else:
@@ -316,7 +316,7 @@ def admin_add_article(request):
             session.close()
             raise HTTPBadRequest()
         article.title = title
-        article.date = date
+        article.date = datetime.now()
         article.author = author
         article.content = content
         article.set_categories_by_name(session,categories)
@@ -344,3 +344,86 @@ def admin_del_article(request):
     session.commit()
     session.close()
     return HTTPFound(location=request.route_url('admin_article'))
+
+def admin_view_project(request):
+    """This view allow you to modify or create a project"""
+
+    session = dbSession()
+    try:
+        projectId = request.matchdict['id']
+    except:
+        session.close()
+        raise HTTPBadRequest
+    if projectId != '-1':
+        try:
+            project = session.query(Project).\
+              filter(Project.id == projectId).one()
+        except:
+            session.close()
+            raise HTTPBadRequest
+        
+        return{'id':projectId, 'title':project.title,
+               'author':project.author,
+               'content':project.getMdFileContent(),
+               'submitMessage':'Modify project'}
+    else:
+        return{'id':'-1', 'title':'',
+               'author':'',
+               'content':'',
+               'submitMessage':'Create project'}
+
+
+def admin_add_project(request):
+    """Add a new project or modify
+    a project already registered in the database
+
+    If the request have an id variable, that means that
+    we will do a modification. Otherwise, the article is new."""
+
+    session = dbSession()
+    postData = request.POST
+    projectId = request.matchdict['id']
+    if 'submit' in postData:
+        title = postData['title']
+        date = datetime.now()
+        author = postData['author']
+        mdContent = postData['content']
+    else:
+        session.close()
+        raise HTTPBadRequest()
+    if projectId != '-1' :
+        try:
+            project=session.query(Project)\
+                .filter(Project.id == projectId).one()
+        except:
+            session.close()
+            raise HTTPBadRequest()
+        project.title = title
+        project.date = datetime.now()
+        project.author = author
+    else:
+        project = Project(title, "", author, date)
+    content = project.processMd(mdContent)
+    project.content = content
+    session.add(project)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_project'))
+
+
+def admin_del_project(request):
+    """Delete the project given in request
+    matchdict"""
+
+    session = dbSession()
+    try:
+        projectId = request.matchdict['id']
+        project = session.query(Project).\
+          filter(Project.id == projectId).one()
+    except:
+        session.close()
+        raise HTTPBadRequest
+    session.delete(project)
+    session.commit()
+    session.close()
+    return HTTPFound(location=request.route_url('admin_project'))

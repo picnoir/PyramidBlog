@@ -2,6 +2,7 @@
 
 import sys
 import hashlib
+import os
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -20,11 +21,13 @@ from pyramid.security import (Everyone,
 
 from readers import MarkdownReader
 from customExceptions import TooMuchMetaCarac
+import markdown
 
 Base = declarative_base()
 dbEngine = create_engine('sqlite:///:blog:')
 #dbEngine = create_engine('sqlite:////home/flex/www/alternativebit/public_html/Blog/blog/blog/bdd.sqlite')
 dbSession = sessionmaker(bind=dbEngine)
+mdFilesLocation = os.getcwdu() + '/mdFiles'
 
 
 "Association tables"
@@ -218,14 +221,43 @@ class Project(Base):
     title = Column(String, nullable = False)
     content = Column(String)
     author = Column(String)
+    date = Column(DateTime)
 
-    def __init__(self, title, content, author):
+    def __init__(self, title, content, author, date):
         self.title = title
         self.content = content
         self.author = author
+        self.date = date
 
     def __repr__(self):
         return "<Project %s>" % (self.title)
+
+    def getMdFileContent(self):
+        """Returns the content of the md
+        file associated with this project"""
+
+        try:
+            mdFile = open('{0}/projects/{1}.md'.format(mdFilesLocation,
+                                                        self.title), 'r')
+            mdContent = mdFile.read()
+            mdFile.close()
+        except:
+            mdContent = "Cannot find file, creating one."
+        return mdContent
+
+    def processMd(self, mdString):
+        """Return the html version of the markdown
+        string given in parameter and save the mdString in
+        the appropriate markdown file."""
+
+        htmlString=markdown.markdown(mdString)
+        mdFile = open('{0}/projects/{1}.md'.format(mdFilesLocation,
+                                                        self.title), 'w')
+        mdFile.write(mdString)
+        mdFile.close()
+        return htmlString
+
+        
 
 class RootFactory(object):
     __acl__ = [
