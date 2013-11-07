@@ -188,6 +188,7 @@ class User(Base):
             user = session.query(User).\
                 filter(User.name == name).one()
         except NoResultFound:
+            session.close()
             return False
         session.close()
         return (user.password == hashlib.sha512(password).hexdigest())
@@ -205,6 +206,7 @@ class User(Base):
             user = session.query(User).\
                 filter(User.name == username).one()
         except NoResultFound:
+            session.close()
             return False
         session.close()
         return user

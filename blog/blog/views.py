@@ -72,8 +72,10 @@ def blog_article_view(request):
         try:
                 articleId = request.matchdict['articleId']
         except KeyError:
+                session.close()
                 raise HTTPNotFound()
         article = session.query(Article).filter(Article.id == articleId).all()
+        session.close()
         if len(article) > 1:
                 raise HTTPInternalServerError()
         if len(article) == 0:
@@ -83,7 +85,6 @@ def blog_article_view(request):
                       'date' : article.date.strftime("%d/%m/%y %H:%M"),\
                       'author' : article.author,\
                       'content' : article.content}
-        session.close()
         return {'article' : renderDict}
 
 def project_view(request):
@@ -205,17 +206,19 @@ def admin_view_user(request):
 
     You can change any username or create one with this formular"""
 
-    session = dbSession()
     try:
         userId = request.matchdict['id']
     except:
         raise HTTPBadRequest()
     if userId!='-1':
+        session = dbSession()
         try:
             user = session.query(User).\
                 filter(User.id == userId).one()
         except:
+            session.close()
             raise HTTPBadRequest()
+        session.close()
         return{'username': user.name, 'id': userId,
             'group': user.group,
             'submitMessage':'Modify User'}
@@ -298,6 +301,7 @@ def admin_view_article(request):
         except:
             session.close()
             raise HTTPBadRequest
+        session.close()
         categoryNameList = []
         for category in article.categories:
             categoryNameList.append(category.name)
@@ -386,12 +390,13 @@ def admin_view_project(request):
         except:
             session.close()
             raise HTTPBadRequest
-        
+        session.close() 
         return{'id':projectId, 'title':project.title,
                'author':project.author,
                'content':project.getMdFileContent(),
                'submitMessage':'Modify project'}
     else:
+        session.close()
         return{'id':'-1', 'title':'',
                'author':'',
                'content':'',
