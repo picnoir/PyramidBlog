@@ -257,6 +257,36 @@ class Project(Base):
         mdFile.close()
         return htmlString
 
+    def toDict(self):
+        """Returns the object under a dict 
+        shape"""
+	    
+        return {'title':self.title,'content':self.content,\
+		'author':self.author,'date':self.date.\
+                strftime("%d/%m/%y %H:%M"),
+                'id':self.id}
+
+    @classmethod
+    def getProjectsList(cls):
+        """Returns a list of projects for a given
+	page."""
+	
+	session = dbSession()
+	projectList = session.query(Project).all()
+	session.close()
+	return projectList
+
+    @classmethod
+    def getProject(cls, projectId):
+	"""Returns the project having the ID
+	given in parameter"""
+
+	session = dbSession()
+	project = session.query(Project).\
+			filter(Project.id == projectId).one()
+	session.close()
+	return project
+
         
 
 class RootFactory(object):
@@ -266,4 +296,4 @@ class RootFactory(object):
     ]
 
     def __init__(self, request):
-        pass # pragma: no cover
+        pass

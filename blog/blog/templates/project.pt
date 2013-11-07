@@ -16,22 +16,22 @@
 	<div class="titre"></div>
       </header>
       <div class="blocPrincipal"> 
-	<h2 class="sectionTitle">Blog</h2>
+	<h2 class="sectionTitle">Projets</h2>
 	<hr class="titreHr" />
 
 
 	<article>
 	  <header class="headerArticle">
-	    <h3 class="titreArticle"> ${article['title']} </h3>
-	    <p class="auteur">Par ${article['author']} </p>
-	    <time> ${article['date']} </time>
+	    <h3 class="titreArticle"> ${project['title']} </h3>
+	    <p class="auteur">Par ${project['author']} </p>
+	    <time> ${project['date']} </time>
 	    <p class="CategorieArticle">
 	    </p>
 	  </header>
-	  <div class="content" tal:content="structure article['content']"> 
+	  <div class="content" tal:content="structure project['content']"> 
 	  </div>
 	  <hr class="hrArticles" />
-	</article>
+  </article>
 
 
       </div>
@@ -44,17 +44,11 @@
 
 	  </ul>
 	  <hr class="menuHr"/>
-	  <p class="titreCat">Categories</p>
+	  <p class="titreCat">Liste des projets:</p>
 	  <hr class="catHr"/>
 	<ul class="categories">
-	  <li>
-	    <p class="categorie"> <a class="categorie" href="/blog/0/Informatique">Informatique</a> </p>
-	  </li>
-	  <li>
-	    <p class="categorie"><a class="categorie" href="/blog/0/Cinema">Cinema</a></p>
-	  </li>
-	  <li>
-	    <p class="categorie"><a class="categorie" href="/blog/0/Divers">Divers</a></p>
+	  <li tal:repeat="project renderDictList">
+	  <p class="categorie"> <a class="categorie" href="/project/${project['id']}">${project['title']}</a> </p>
 	  </li>
 	</ul>
 	  <hr class="catHr"/>
